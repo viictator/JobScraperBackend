@@ -7,16 +7,17 @@ def scrape():
     soup = BeautifulSoup(response.text, 'html.parser')
 
     data = []
-    for item in soup.select("article.product_pod h3 a"):
-        title = item['title']  # <a title="The Title">
-        data.append({"title": title})
+    for article in soup.select("article.product_pod"):
+        title = article.select_one("h3 a")["title"]
+        price = article.select_one(".price_color").get_text(strip=True)
+        data.append({"title": title, "price": price})
 
     return data
 
 
 def send_to_backend(data):
     response = requests.post(
-        "http://localhost:8080/api/scraped-data",
+        "http://localhost:8080/api/scraped-books",
         json=data,
         headers={'Content-Type': 'application/json'}
     )
@@ -24,4 +25,5 @@ def send_to_backend(data):
 
 if __name__ == "__main__":
     scraped = scrape()
+    print(scraped)
     send_to_backend(scraped)
