@@ -43,7 +43,11 @@ def scrape():
     options.add_argument("--disable-gpu")
     # options.add_argument("--headless")  # Enable for headless scraping once confirmed working
 
-    driver = uc.Chrome(options=options)
+    class PatchedChrome(uc.Chrome):
+        def __del__(self):
+            pass  # Suppress undetected_chromedriver cleanup bug
+
+    driver = PatchedChrome(options=options)
     print("Browser launched")
 
     driver.get("https://kea.jobteaser.com")
