@@ -196,12 +196,13 @@ def scrape():
 
 
             data.append({
-                "companyName": companyName,
                 "jobTitle": jobTitle,
+                "companyName": companyName,
+                "location": location,
                 "link": link,
                 "time": time,
                 "contract": contract,
-                "location": location
+                "originsite": "KEA Jobportal"
             })
         except Exception as e:
             print(f"Skipping job card due to error: {e}")
@@ -211,20 +212,6 @@ def scrape():
     print("Browser closed")
     return data
 
-def send_to_backend(data):
-    try:
-        response = requests.post(
-            "http://localhost:8080/api/scraped-jobs",
-            json=data,
-            headers={'Content-Type': 'application/json'}
-        )
-        print("✅ Data sent to backend. Status code:", response.status_code)
-        print(data)
-    except Exception as e:
-        print("❌ Failed to send data to backend:", e)
 
-if __name__ == "__main__":
-    jobs = scrape()
-    if jobs:
-        print(jobs)
-        send_to_backend(jobs)
+
+

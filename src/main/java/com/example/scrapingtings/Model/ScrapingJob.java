@@ -7,6 +7,8 @@ public class ScrapingJob {
     private String time;
     private String location;
     private String contract;
+    private String description;
+    private String originsite;
 
     // Required: Getters & Setters
     public String getCompanyName() {
@@ -55,5 +57,21 @@ public class ScrapingJob {
 
     public void setContract(String contract) {
         this.contract = contract;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getOriginsite() {
+        return originsite;
+    }
+
+    public void setOriginsite(String originsite) {
+        this.originsite = originsite;
     }
 }
