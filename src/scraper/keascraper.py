@@ -66,7 +66,10 @@ def login(driver):
         try:
             print(f"🎓 Looking for KEA login link... (attempt {attempt + 1})")
             login_link = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'KEA') and (contains(text(), 'konto') or contains(text(), 'account'))]"))
+                EC.element_to_be_clickable((
+                    By.XPATH,
+                    "//a[contains(text(), 'KEA') and (contains(text(), 'konto') or contains(text(), 'account'))]"
+                ))
             )
             login_link.click()
             print("✅ Clicked KEA login link!")
@@ -90,12 +93,7 @@ def login(driver):
     email_input = driver.find_element(By.NAME, "loginfmt")
     email_input.clear()
     email_input.send_keys(username)
-
-    # ✅ FIX: Vent til knappen er klikbar før klik
-    next_btn = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.ID, "idSIButton9"))
-    )
-    next_btn.click()
+    driver.find_element(By.ID, "idSIButton9").click()  # Next
     print("➡️ Submitted email")
 
     # Enter password
@@ -137,6 +135,7 @@ def login(driver):
         lambda d: any(domain in d.current_url for domain in ["kea.jobteaser.com", "jobteaser.com"])
     )
     print("🎉 Successfully logged in and redirected!")
+
 
 
 def scrape():
