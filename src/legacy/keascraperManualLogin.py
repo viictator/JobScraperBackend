@@ -9,7 +9,7 @@ import os
 import time
 from urllib.parse import urlparse
 
-COOKIES_FILE = "cookies.pkl"
+COOKIES_FILE = "../scraper/cookies.pkl"
 URL = "https://kea.jobteaser.com/en/job-offers?location=Australie%3A%3AWestern+Australia%3A%3A%3A%3ADenmark%3A%3A_zaRTaoLz4zNLdqZHB3aBLFMpQDM%3D&position_category_uuid=ddc0460c-ce0b-4d98-bc5d-d8829ff9cf11&position_category_uuid=fbab2736-0eea-4d61-899c-161eea6a2b45&locale=da&study_levels=1&study_levels=2&work_experience_code=young_graduate"
 
 def save_cookies(driver, path):
