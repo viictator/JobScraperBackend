@@ -190,11 +190,18 @@ def scrape():
             companyName = div.select_one("p.JobAdCard_companyName__Ieoi3").get_text(strip=True)
             jobTitle = div.select_one("h3.JobAdCard_title__vdhrP").get_text(strip=True)
             link = "https://kea.jobteaser.com" + div.select_one("h3 a")["href"]
+            time = div.select_one("time.sk-Typography_regular__a_y2X").get_text(strip=True)
+            contract = div.select_one("div.JobAdCard_contractInfo__98QBU span").get_text(strip=True)
+            location = div.select_one('div[data-testid="jobad-card-location"] span').get_text(strip=True)
+
 
             data.append({
                 "companyName": companyName,
                 "jobTitle": jobTitle,
-                "link": link
+                "link": link,
+                "time": time,
+                "contract": contract,
+                "location": location
             })
         except Exception as e:
             print(f"Skipping job card due to error: {e}")
