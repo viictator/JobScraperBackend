@@ -1,6 +1,9 @@
 from keascraperFinal import scrape as scrape_kea
 from jobindexscraper import scrape as scrape_jobindex
 import requests
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 
 def send_to_backend(data):
     try:

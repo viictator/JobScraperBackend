@@ -31,7 +31,7 @@ def scrape():
         driver.get(page_url)
 
         try:
-            WebDriverWait(driver, 10).until(
+            WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.jobsearch-result"))
             )
             print(f"✅ Job cards loaded on page {page}")
