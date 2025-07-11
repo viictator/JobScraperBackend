@@ -34,22 +34,34 @@ pip install setuptools
 
 pip install undetected-chromedriver
 
+
 Set Environment Variables
+
 # Linux/macOS
+
 export LOGIN_EMAIL=your_email@stud.kea.dk
+
 export LOGIN_PASSWORD=your_secure_password
 
 # Windows CMD
+
 set LOGIN_EMAIL=your_email@stud.kea.dk
+
 set LOGIN_PASSWORD=your_secure_password
+
 
 After this, start the Spring Boot backend.
 
 # Frontend (in a separate terminal/tab)
+
 git clone https://github.com/viictator/JobScraperFrontend.git
+
 cd JobScraperFrontend
+
 npm install
+
 npm run dev
+
 
 
 
