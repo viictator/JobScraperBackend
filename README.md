@@ -1,8 +1,8 @@
 # 🎓 Student Job Finder
 
-A Python-based job scraping tool designed for students to automatically collect job postings from multiple platforms — including KEA's internal job portal and other external sites.
+A Python-based job scraping tool designed for myself to automatically collect relevant student job postings from multiple platforms — including KEA's internal job portal and other external sites.
 
-This project uses undetected Chrome automation to bypass bot detection and streamlines the job search process for students.
+This project uses undetected Chrome automation to bypass bot detection and makes finding job postings a breeze.
 
 ---
 
@@ -23,10 +23,8 @@ Before running, make sure the following are installed:
 - [Google Chrome](https://www.google.com/chrome/)
 
 ⚙️ Installation
-1. Clone Both Repositories
-bash
-Kopiér
-Rediger
+1. Clone Both Repositories(Frontend & Backend)
+
 # Backend (you're here)
 git clone https://github.com/viictator/JobScraperBackend.git
 cd JobScraperBackend
