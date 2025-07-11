@@ -35,15 +35,15 @@ pip install setuptools
 pip install undetected-chromedriver
 
 
-Set Environment Variables
 
-# Linux/macOS
+
+# Linux/macOS Environment Variables
 
 export LOGIN_EMAIL=your_email@stud.kea.dk
 
 export LOGIN_PASSWORD=your_secure_password
 
-# Windows CMD
+# Windows CMD Environment Variables
 
 set LOGIN_EMAIL=your_email@stud.kea.dk
 
