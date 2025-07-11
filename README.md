@@ -27,8 +27,11 @@ Before running, make sure the following are installed:
 
 # Backend (you're here)
 git clone https://github.com/viictator/JobScraperBackend.git
+
 cd JobScraperBackend
+
 pip install setuptools
+
 pip install undetected-chromedriver
 
 Set Environment Variables
