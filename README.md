@@ -50,7 +50,7 @@ set LOGIN_EMAIL=your_email@stud.kea.dk
 set LOGIN_PASSWORD=your_secure_password
 
 
-After this, start the Spring Boot backend.
+
 
 # Frontend (in a separate terminal/tab)
 
@@ -68,6 +68,7 @@ npm run dev
 
 
 ▶️ How to Use
+
 Start the backend in one terminal/tab.
 
 Start the frontend in another using npm run dev.
