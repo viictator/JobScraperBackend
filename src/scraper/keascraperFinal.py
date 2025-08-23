@@ -16,7 +16,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 
 COOKIES_FILE = "cookies.pkl"
-URL = "https://kea.jobteaser.com/en/job-offers?location=Australie%3A%3AWestern+Australia%3A%3A%3A%3ADenmark%3A%3A_zaRTaoLz4zNLdqZHB3aBLFMpQDM%3D&position_category_uuid=ddc0460c-ce0b-4d98-bc5d-d8829ff9cf11&position_category_uuid=fbab2736-0eea-4d61-899c-161eea6a2b45&locale=da&study_levels=1&study_levels=2&work_experience_code=young_graduate"
+URL = "https://ek.jobteaser.com/en/job-offers?position_category_uuid=ddc0460c-ce0b-4d98-bc5d-d8829ff9cf11&locale=da&locale=en&study_levels=1&study_levels=2&work_experience_code=young_graduate"
 
 def save_cookies(driver, path):
     with open(path, "wb") as file:
@@ -52,8 +52,8 @@ def login(driver):
     if not username or not password:
         raise Exception("LOGIN_EMAIL and LOGIN_PASSWORD environment variables must be set")
 
-    print("🔐 Navigating to kea.jobteaser.com...")
-    driver.get("https://kea.jobteaser.com")
+    print("🔐 Navigating to ek.jobteaser.com...")
+    driver.get("https://ek.jobteaser.com")
 
     # Wait for redirect to connect.jobteaser.com
     WebDriverWait(driver, 20).until(
@@ -64,18 +64,18 @@ def login(driver):
     # Click KEA login link (a-tag containing 'KEA' and ('konto' or 'account'))
     for attempt in range(5):
         try:
-            print(f"🎓 Looking for KEA login link... (attempt {attempt + 1})")
+            print(f"🎓 Looking for EK login link... (attempt {attempt + 1})")
             login_link = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'KEA') and (contains(text(), 'konto') or contains(text(), 'account'))]"))
+                EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'EK') and (contains(text(), 'konto') or contains(text(), 'account'))]"))
             )
             login_link.click()
-            print("✅ Clicked KEA login link!")
+            print("✅ Clicked EK login link!")
             break
         except Exception as e:
-            print(f"❌ KEA login link not ready (attempt {attempt + 1}): {e}")
+            print(f"❌ EK login link not ready (attempt {attempt + 1}): {e}")
             time.sleep(2)
     else:
-        raise Exception("Could not find or click KEA login link.")
+        raise Exception("Could not find or click EK login link.")
 
     # Wait for Microsoft login page to load
     WebDriverWait(driver, 20).until(
@@ -134,7 +134,7 @@ def login(driver):
 
     # Wait for redirect back to kea.jobteaser.com or jobteaser domain after login
     WebDriverWait(driver, 60).until(
-        lambda d: any(domain in d.current_url for domain in ["kea.jobteaser.com", "jobteaser.com"])
+        lambda d: any(domain in d.current_url for domain in ["ek.jobteaser.com", "jobteaser.com"])
     )
     print("🎉 Successfully logged in and redirected!")
 
@@ -153,7 +153,7 @@ def scrape():
     driver = PatchedChrome(options=options)
     print("Browser launched")
 
-    driver.get("https://kea.jobteaser.com")
+    driver.get("https://ek.jobteaser.com")
 
     if os.path.exists(COOKIES_FILE):
         try:
@@ -189,7 +189,7 @@ def scrape():
         try:
             companyName = div.select_one("p.JobAdCard_companyName__Ieoi3").get_text(strip=True)
             jobTitle = div.select_one("h3.JobAdCard_title__vdhrP").get_text(strip=True)
-            link = "https://kea.jobteaser.com" + div.select_one("h3 a")["href"]
+            link = "https://ek.jobteaser.com" + div.select_one("h3 a")["href"]
             time = div.select_one("time.sk-Typography_regular__a_y2X").get_text(strip=True)
             contract = div.select_one("div.JobAdCard_contractInfo__98QBU span").get_text(strip=True)
             location = div.select_one('div[data-testid="jobad-card-location"] span').get_text(strip=True)
@@ -202,7 +202,7 @@ def scrape():
                 "link": link,
                 "time": time,
                 "contract": contract,
-                "originsite": "KEA Jobportal"
+                "originsite": "EK Jobportal"
             })
         except Exception as e:
             print(f"Skipping job card due to error: {e}")
