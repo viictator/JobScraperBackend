@@ -34,6 +34,8 @@ pip install setuptools
 
 pip install undetected-chromedriver
 
+pip install beautifulsoup4
+
 
 
 
