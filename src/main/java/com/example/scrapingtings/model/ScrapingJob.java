@@ -1,16 +1,38 @@
-package com.example.scrapingtings.Model;
+package com.example.scrapingtings.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class ScrapingJob {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String companyName;
     private String jobTitle;
     private String link;
     private String time;
     private String location;
     private String contract;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String originsite;
 
-    // Required: Getters & Setters
+
+
+   /* public ScrapingJob(String companyName, String jobTitle, String link, String time, String location, String contract, String description, String originsite) {
+        this.companyName = companyName;
+        this.jobTitle = jobTitle;
+        this.link = link;
+        this.time = time;
+        this.location = location;
+        this.contract = contract;
+        this.description = description;
+        this.originsite = originsite;
+    }*/
+
+    public ScrapingJob() {
+    }
+
     public String getCompanyName() {
         return companyName;
     }
@@ -73,5 +95,13 @@ public class ScrapingJob {
 
     public void setOriginsite(String originsite) {
         this.originsite = originsite;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

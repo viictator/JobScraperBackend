@@ -1,8 +1,10 @@
 package com.example.scrapingtings;
 
-import com.example.scrapingtings.Model.ScrapingBook;
-import com.example.scrapingtings.Model.ScrapingJob;
 import com.example.scrapingtings.Utils.DateUtils;
+import com.example.scrapingtings.model.ScrapingBook;
+import com.example.scrapingtings.model.ScrapingJob;
+import com.example.scrapingtings.service.ScrapingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,10 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class ScrapingController {
+
+    @Autowired
+    ScrapingService scrapingService;
+
 
     // Temporary in-memory storage
     private final List<ScrapingBook> scrapedBooks = new ArrayList<>();
@@ -45,9 +51,12 @@ public class ScrapingController {
         }
         scrapedJobs.clear();
         scrapedJobs.addAll(data);
-        System.out.println("Received " + data.size() + " items");
+
+        scrapingService.receiveJobs(data);
         return ResponseEntity.ok().build();
+
     }
+
 
 
     @GetMapping("/scraped-jobs")
@@ -59,9 +68,10 @@ public class ScrapingController {
     public ResponseEntity<String> startScraper() {
         try {
             // Adjust python executable and path to main.py as needed
-            ProcessBuilder pb = new ProcessBuilder("C:\\Users\\victo\\AppData\\Local\\Programs\\Python\\Python313\\python.exe", "C:\\Users\\victo\\IdeaProjects\\JobScraperBackend\\src\\scraper\\main.py");
+            ProcessBuilder pb = new ProcessBuilder("C:\\Users\\Victor\\AppData\\Local\\Programs\\Python\\Python313\\python.exe", "C:\\Users\\Victor\\Desktop\\IntelliJ Projects\\JobScraperBackend\\src\\scraper\\main.py");
 
             Process process = pb.start();
+
 
             // Optional: Read output or error streams to log or debug
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));

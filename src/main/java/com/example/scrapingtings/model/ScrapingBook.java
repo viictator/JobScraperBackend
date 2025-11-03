@@ -1,4 +1,4 @@
-package com.example.scrapingtings.Model;
+package com.example.scrapingtings.model;
 
 public class ScrapingBook {
     private String title;

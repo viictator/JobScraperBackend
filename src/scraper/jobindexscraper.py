@@ -6,7 +6,7 @@ from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 import requests
 
-BASE_URL = "https://www.jobindex.dk/jobsoegning?employment_type=3&subid=1&subid=93"
+BASE_URL = "https://www.jobindex.dk/jobsoegning/storkoebenhavn?employment_type=3&subid=1&subid=93"
 
 def scrape():
     options = uc.ChromeOptions()

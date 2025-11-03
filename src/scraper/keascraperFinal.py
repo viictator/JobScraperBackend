@@ -16,7 +16,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 
 COOKIES_FILE = "cookies.pkl"
-URL = "https://ek.jobteaser.com/en/job-offers?position_category_uuid=ddc0460c-ce0b-4d98-bc5d-d8829ff9cf11&locale=da&locale=en&study_levels=1&study_levels=2&work_experience_code=young_graduate"
+URL = "https://ek.jobteaser.com/en/job-offers?abroad_only=false&lat=55.68672426010366&lng=12.570072346106372&localized_location=Copenhagen&radius=30&saved_search=true&locale=da&locale=en&location=Denmark%3A%3A%3A%3A%3A%3ACopenhagen%3A%3A_ZUypNDmddaF7ZbS2ZHo1eFF3ib4%3D&position_category_uuid=ddc0460c-ce0b-4d98-bc5d-d8829ff9cf11&study_levels=1&study_levels=2&work_experience_code=young_graduate"
 
 def save_cookies(driver, path):
     with open(path, "wb") as file:
@@ -56,7 +56,7 @@ def login(driver):
     driver.get("https://ek.jobteaser.com")
 
     # Wait for redirect to connect.jobteaser.com
-    WebDriverWait(driver, 20).until(
+    WebDriverWait(driver, 30).until(
         lambda d: "connect.jobteaser.com" in d.current_url
     )
     print("🔄 Landed on connect.jobteaser.com")
@@ -65,7 +65,7 @@ def login(driver):
     for attempt in range(5):
         try:
             print(f"🎓 Looking for EK login link... (attempt {attempt + 1})")
-            login_link = WebDriverWait(driver, 10).until(
+            login_link = WebDriverWait(driver, 30).until(
                 EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'EK') and (contains(text(), 'konto') or contains(text(), 'account'))]"))
             )
             login_link.click()
@@ -144,7 +144,10 @@ def scrape():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
-    # options.add_argument("--headless")  # Uncomment to run headless
+    options.add_argument("--start-maximized")
+    options.add_argument("--window-size=1280,800")
+
+# options.add_argument("--headless")  # Uncomment to run headless
 
     class PatchedChrome(uc.Chrome):
         def __del__(self):
@@ -187,11 +190,11 @@ def scrape():
     data = []
     for div in soup.select("div.sk-CardContainer_container__PNt2O"):
         try:
-            companyName = div.select_one("p.JobAdCard_companyName__Ieoi3").get_text(strip=True)
-            jobTitle = div.select_one("h3.JobAdCard_title__vdhrP").get_text(strip=True)
+            companyName = div.select_one("p.JobAdCard_companyName__7vp_H").get_text(strip=True)
+            jobTitle = div.select_one("h3.JobAdCard_title__l2BSO").get_text(strip=True)
             link = "https://ek.jobteaser.com" + div.select_one("h3 a")["href"]
             time = div.select_one("time.sk-Typography_regular__a_y2X").get_text(strip=True)
-            contract = div.select_one("div.JobAdCard_contractInfo__98QBU span").get_text(strip=True)
+            contract = div.select_one("div.JobAdCard_contractInfo__8S_AD span").get_text(strip=True)
             location = div.select_one('div[data-testid="jobad-card-location"] span').get_text(strip=True)
 
 
