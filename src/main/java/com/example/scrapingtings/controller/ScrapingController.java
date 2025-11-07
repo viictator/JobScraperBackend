@@ -1,6 +1,5 @@
-package com.example.scrapingtings;
+package com.example.scrapingtings.controller;
 
-import com.example.scrapingtings.Utils.DateUtils;
 import com.example.scrapingtings.model.ScrapingJob;
 import com.example.scrapingtings.service.ScrapingService;
 import org.springframework.beans.factory.annotation.Autowired;
