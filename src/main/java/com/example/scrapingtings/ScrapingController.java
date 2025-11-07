@@ -1,7 +1,6 @@
 package com.example.scrapingtings;
 
 import com.example.scrapingtings.Utils.DateUtils;
-import com.example.scrapingtings.model.ScrapingBook;
 import com.example.scrapingtings.model.ScrapingJob;
 import com.example.scrapingtings.service.ScrapingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,40 +27,24 @@ public class ScrapingController {
 
 
     // Temporary in-memory storage
-    private final List<ScrapingBook> scrapedBooks = new ArrayList<>();
     private final List<ScrapingJob> scrapedJobs = new ArrayList<>();
-
-
-    @PostMapping("/scraped-books")
-    public ResponseEntity<Void> receiveBooks(@RequestBody List<ScrapingBook> data) {
-        scrapedBooks.addAll(data);
-        System.out.println("Received " + data.size() + " items");
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/scraped-books")
-    public ResponseEntity<List<ScrapingBook>> getScrapedBooks() {
-        return ResponseEntity.ok(scrapedBooks);
-    }
 
     @PostMapping("/scraped-jobs")
     public ResponseEntity<Void> receiveJobs(@RequestBody List<ScrapingJob> data) {
-        for (ScrapingJob job : data) {
+        /*for (ScrapingJob job : data) {
             job.setTime(DateUtils.toDaysAgo(job.getTime()));
         }
         scrapedJobs.clear();
-        scrapedJobs.addAll(data);
+        scrapedJobs.addAll(data);*/
 
         scrapingService.receiveJobs(data);
         return ResponseEntity.ok().build();
 
     }
 
-
-
     @GetMapping("/scraped-jobs")
     public ResponseEntity<List<ScrapingJob>> getScrapedJobs() {
-        return ResponseEntity.ok(scrapedJobs);
+        return scrapingService.getAllJobs();
     }
 
     @PostMapping("/start-scraper")

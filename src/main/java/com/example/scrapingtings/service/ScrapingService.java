@@ -1,8 +1,10 @@
 package com.example.scrapingtings.service;
 
+import com.example.scrapingtings.Utils.DateUtils;
 import com.example.scrapingtings.model.ScrapingJob;
 import com.example.scrapingtings.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,14 @@ public class ScrapingService {
     public ResponseEntity<Void> receiveJobs (List<ScrapingJob> data) {
         data.forEach((job) -> {
             try {
-                jobRepository.save(job);
-                System.out.println("✅ Saved: " + job.getJobTitle());
+                if (!jobRepository.existsByJobTitleAndCompanyName(job.getJobTitle(), job.getCompanyName())) {
+                    job.setTime(DateUtils.toDaysAgo(job.getTime()));
+                    jobRepository.save(job);
+                    System.out.println("✅ Saved: " + job.getJobTitle());
+                } else {
+                    System.out.println("❌ Skipped due to duplicate: " + job.getJobTitle() + "" + job.getCompanyName());
+                }
+
             } catch (Exception e) {
                 // Log the exact job and error that failed
                 System.err.println("❌ ERROR saving job: " + job.getJobTitle() + " from " + job.getOriginsite());
@@ -37,6 +45,10 @@ public class ScrapingService {
 
         System.out.println("Received " + data.size() + " items");
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<List<ScrapingJob>> getAllJobs() {
+        return new ResponseEntity<>(jobRepository.findAll(), HttpStatus.OK);
     }
 
 
