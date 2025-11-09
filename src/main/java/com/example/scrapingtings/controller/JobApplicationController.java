@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class JobApplicationController {
 
@@ -29,8 +31,23 @@ public class JobApplicationController {
 
         } catch(Exception e) {
             System.err.println("Error generating application: " + e.getMessage());
-            return new ResponseEntity<>("Failed to generate and save application: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed to generate and save application: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("generateAll")
+    public ResponseEntity<String> generateAllApplications() {
+        try {
+            List<JobApplication> jobApplications = jobApplicationService.generateAllApplications();
+            String successMessage =
+                    "Successfully generated " + jobApplications.size() + " job applications";
+            System.out.println("✅ " + successMessage);
+            return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
+
+        } catch(Exception e) {
+            System.err.println("Error generating ALL applications " + e.getMessage());
+            return new ResponseEntity<>("Failed to generate ALL and save applications " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 

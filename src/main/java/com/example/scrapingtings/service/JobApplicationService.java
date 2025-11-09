@@ -1,6 +1,7 @@
 package com.example.scrapingtings.service;
 
 import com.example.scrapingtings.model.JobApplication;
+import com.example.scrapingtings.model.ScrapingJob;
 import com.example.scrapingtings.repository.JobApplicationRepository;
 import com.example.scrapingtings.repository.JobRepository;
 import jakarta.annotation.PostConstruct;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -39,6 +42,20 @@ public class JobApplicationService {
     public void init() throws IOException {
         this.chatClient = chatClientBuilder.build();
         this.myProfileText = myProfileResource.getContentAsString(StandardCharsets.UTF_8);
+    }
+
+
+    public List<JobApplication> generateAllApplications() {
+        List<ScrapingJob> allJobs = jobRepository.findAll();
+        List<JobApplication> allApplications = new ArrayList<>();
+
+        allJobs.forEach((job) -> {
+            String jobDescription = job.getDescription() == null ? "null" : job.getDescription();
+            allApplications.add(generateApplication(job.getJobTitle(), job.getCompanyName(), jobDescription));
+        });
+
+        System.out.println();
+        return allApplications;
     }
 
 
@@ -88,5 +105,7 @@ public class JobApplicationService {
         return newJobApp;
 
     }
+
+
 
 }
