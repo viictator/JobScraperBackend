@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api")
+@RequestMapping("/api/jobs")
 public class ScrapingController {
 
     @Autowired
