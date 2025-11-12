@@ -28,7 +28,7 @@ public class UserService {
         newUser.setUsername(username);
         newUser.setPassword(passwordEncoder.encode(rawPassword));
 
-        Role defaultRole = roleRepository.findByName("ROLE_USER");
+        Role defaultRole = roleRepository.findByName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(defaultRole);
         newUser.setRoles(roles);

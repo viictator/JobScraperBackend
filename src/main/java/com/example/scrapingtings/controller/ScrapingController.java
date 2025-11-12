@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/scraping")
+@RequestMapping("")
 public class ScrapingController {
 
     @Autowired
