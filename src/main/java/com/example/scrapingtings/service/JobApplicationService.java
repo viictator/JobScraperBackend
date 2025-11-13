@@ -73,6 +73,10 @@ public class JobApplicationService {
                         "User with username " + username + " not found."
                 ));
         int userId = user.getId();
+        String personalName = user.getPersonalName();
+        String personalEmail = user.getPersonalEmail();
+        String personalAddress = user.getPersonalAddress();
+        String profileText = user.getProfileText();
 
         ScrapingJob job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -97,12 +101,16 @@ public class JobApplicationService {
             3. In the body, explicitly draw **direct connections** between the applicant's 
                **profile** (skills and experience) and the **job description** (requirements).
             4. End with a professional closing and the applicant's name.
-            5. The job might be in Danish or English, write the application accordingly
+            5. The job might be in Danish or English, write the application accordingly          
+            6. Make sure to include the {personalName}, {personalEmail}, {personalAddress} at the top of the application, and the generated application below it. Each with a line break 'ENTER' between them.
             
             ---
             
             **APPLICANT PROFILE:**
-            {myProfile}
+            {personalName}
+            {personalEmail}
+            {personalAddress}
+            {profileText}
             
             ---
             
@@ -118,7 +126,10 @@ public class JobApplicationService {
         PromptTemplate promptTemplate = new PromptTemplate(promptText);
 
         Map<String, Object> model = Map.of(
-                "myProfile", this.myProfileText,
+                "personalName", personalName,
+                "personalEmail", personalEmail,
+                "personalAddress", personalAddress,
+                "profileText", profileText,
                 "jobTitle", jobTitle,
                 "companyName", companyName,
                 "jobDescription", jobDescription
