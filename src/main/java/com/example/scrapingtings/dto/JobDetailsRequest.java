@@ -1,4 +1,4 @@
 package com.example.scrapingtings.dto;
 
-public record JobDetailsRequest(String title, String company, String description) {
+public record JobDetailsRequest(int id) {
 }

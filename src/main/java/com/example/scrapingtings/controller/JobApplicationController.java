@@ -8,21 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("/api/user")
 @RestController
+@RequestMapping("/api/user/jobapp")
+@CrossOrigin(origins = "http://localhost:3000")
 public class JobApplicationController {
 
     @Autowired
     JobApplicationService jobApplicationService;
 
-    @PostMapping("generate")
-    public ResponseEntity<String> generateApplication(@RequestBody JobDetailsRequest request) {
+    @PostMapping("")
+    public ResponseEntity<String> generateApplication(@RequestBody JobDetailsRequest request, Principal principal) {
 
         try {
-
-            JobApplication newJobApp = jobApplicationService.generateApplication(request.title(), request.company(), request.description());
+            String username = principal.getName();
+            JobApplication newJobApp = jobApplicationService.generateApplication(request.id(), username);
 
             String successMessage = "Application generated and saved successfully with ID: " + newJobApp.getId() + " Title: " + newJobApp.getJobTitle();
             return new ResponseEntity<>(successMessage, HttpStatus.CREATED);
@@ -34,9 +36,10 @@ public class JobApplicationController {
     }
 
     @PostMapping("generateAll")
-    public ResponseEntity<String> generateAllApplications() {
+    public ResponseEntity<String> generateAllApplications(Principal principal) {
         try {
-            List<JobApplication> jobApplications = jobApplicationService.generateAllApplications();
+            String username = principal.getName();
+            List<JobApplication> jobApplications = jobApplicationService.generateAllApplications(username);
             String successMessage =
                     "Successfully generated " + jobApplications.size() + " job applications";
             System.out.println("✅ " + successMessage);

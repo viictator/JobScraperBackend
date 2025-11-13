@@ -2,21 +2,27 @@ package com.example.scrapingtings.service;
 
 import com.example.scrapingtings.model.JobApplication;
 import com.example.scrapingtings.model.ScrapingJob;
+import com.example.scrapingtings.model.User;
 import com.example.scrapingtings.repository.JobApplicationRepository;
 import com.example.scrapingtings.repository.JobRepository;
+import com.example.scrapingtings.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class JobApplicationService {
@@ -33,6 +39,8 @@ public class JobApplicationService {
     private Resource myProfileResource;
     @Autowired
     private JobRepository jobRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public JobApplicationService(ChatClient.Builder chatClientBuilder) {
         this.chatClientBuilder = chatClientBuilder;
@@ -45,13 +53,12 @@ public class JobApplicationService {
     }
 
 
-    public List<JobApplication> generateAllApplications() {
+    public List<JobApplication> generateAllApplications(String username) {
         List<ScrapingJob> allJobs = jobRepository.findAll();
         List<JobApplication> allApplications = new ArrayList<>();
 
         allJobs.forEach((job) -> {
-            String jobDescription = job.getDescription() == null ? "null" : job.getDescription();
-            allApplications.add(generateApplication(job.getJobTitle(), job.getCompanyName(), jobDescription));
+            allApplications.add(generateApplication(job.getId(), username));
         });
 
         System.out.println();
@@ -59,7 +66,26 @@ public class JobApplicationService {
     }
 
 
-    public JobApplication generateApplication(String jobTitle, String companyName, String jobDescription) {
+    public JobApplication generateApplication(int jobId, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User with username " + username + " not found."
+                ));
+        int userId = user.getId();
+
+        ScrapingJob job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Job with ID " + jobId + " not found in the database."
+                ));
+        String companyName = job.getCompanyName();
+        String jobTitle = job.getJobTitle();
+
+        String jobDescription = job.getDescription() == null ? "" : job.getDescription();
+
+
+
         String promptText = """
             You are a highly skilled professional career assistant. Your goal is to write a single,
             persuasive, and highly customized job application letter for the applicant based on 
@@ -100,7 +126,7 @@ public class JobApplicationService {
 
         String content = chatClient.prompt(promptTemplate.create(model)).call().content();
 
-        JobApplication newJobApp = new JobApplication(jobTitle, companyName, content);
+        JobApplication newJobApp = new JobApplication(jobId, userId, jobTitle, companyName, content);
         jobApplicationRepository.save(newJobApp);
         return newJobApp;
 

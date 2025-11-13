@@ -9,6 +9,8 @@ public class JobApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int jobId;
+    private int userId;
     private String jobTitle;
     private String companyName;
     @Column(columnDefinition = "TEXT")
@@ -17,7 +19,9 @@ public class JobApplication {
     public JobApplication() {
     }
 
-    public JobApplication(String jobTitle, String companyName, String content) {
+    public JobApplication(int jobId, int userId, String jobTitle, String companyName, String content) {
+        this.jobId = jobId;
+        this.userId = userId;
         this.jobTitle = jobTitle;
         this.companyName = companyName;
         this.content = content;
@@ -29,6 +33,22 @@ public class JobApplication {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getJobTitle() {
