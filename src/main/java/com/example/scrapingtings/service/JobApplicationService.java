@@ -1,5 +1,6 @@
 package com.example.scrapingtings.service;
 
+import com.example.scrapingtings.dto.JobAppUpdateRequest;
 import com.example.scrapingtings.model.JobApplication;
 import com.example.scrapingtings.model.ScrapingJob;
 import com.example.scrapingtings.model.User;
@@ -102,7 +103,7 @@ public class JobApplicationService {
                **profile** (skills and experience) and the **job description** (requirements).
             4. End with a professional closing and the applicant's name.
             5. The job might be in Danish or English, write the application accordingly          
-            6. Make sure to include the {personalName}, {personalEmail}, {personalAddress} at the top of the application, and the generated application below it. Each with a line break 'ENTER' between them.
+            6. Make sure to include the {personalName}, {personalEmail}, {personalAddress} at the top of the application, and the generated application below it. Each with a line break between them.
             
             ---
             
@@ -141,6 +142,24 @@ public class JobApplicationService {
         jobApplicationRepository.save(newJobApp);
         return newJobApp;
 
+    }
+
+    public List<JobApplication> getSpecificJobApplication(int userId, int jobId) {
+        List<JobApplication> jobApplications = jobApplicationRepository.findAllByUserIdAndJobId(userId, jobId);
+
+        return jobApplications;
+    }
+
+
+    public JobApplication updateContent(String username, int appId, JobAppUpdateRequest request) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        JobApplication app = jobApplicationRepository.findById(appId)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+
+        app.setContent(request.getContent());
+        return jobApplicationRepository.save(app);
     }
 
 

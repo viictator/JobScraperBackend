@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -49,6 +50,17 @@ public class ScrapingService {
 
     public ResponseEntity<List<ScrapingJob>> getAllJobs() {
         return new ResponseEntity<>(jobRepository.findAll(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ScrapingJob> getSpecificJob(int jobId) {
+        ScrapingJob job = jobRepository.findById(jobId).
+                orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Job not found, ID: " + jobId
+        ));
+
+        return new ResponseEntity<>(job, HttpStatus.OK);
+
     }
 
 

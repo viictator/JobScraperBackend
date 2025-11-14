@@ -77,7 +77,7 @@ def scrape():
                     "link": link,
                     "time": date_posted,
                     "description": description,
-                    "contract": "Uoplyst",  # Not always available
+                    "contract": "No information",  # Not always available
                     "originsite": "Jobindex"
                 })
             except Exception as e:

@@ -5,14 +5,18 @@ import com.example.scrapingtings.dto.UserDto;
 import com.example.scrapingtings.model.User;
 import com.example.scrapingtings.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -59,6 +63,27 @@ public class UserController {
         User updatedUser = userService.updateUserProperty(principal.getUsername(), request);
         return ResponseEntity.ok(UserDto.fromEntity(updatedUser));
     }
+
+    @GetMapping("/profile/status")
+    public ResponseEntity<Map<String, Object>> getProfileStatus(Principal principal) {
+
+        String username = principal.getName();
+
+        User user = userService.getUserByUsername(username);
+
+
+        boolean complete =
+                user.getPersonalName() != null &&
+                        user.getPersonalEmail() != null &&
+                        user.getPersonalAddress() != null &&
+                        user.getProfileText() != null;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("complete", complete);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 

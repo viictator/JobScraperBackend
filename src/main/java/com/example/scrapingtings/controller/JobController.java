@@ -24,4 +24,11 @@ public class JobController {
         return scrapingService.getAllJobs();
     }
 
+    @GetMapping("/{jobid}")
+    public ResponseEntity<ScrapingJob> getSpecificJob(@PathVariable int jobid) {
+        return scrapingService.getSpecificJob(jobid);
+    }
+
 }
+
+
