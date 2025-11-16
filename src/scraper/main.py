@@ -21,18 +21,27 @@ if __name__ == "__main__":
 
     print("\n=== Scraping KEA ===")
     try:
-        all_jobs += scrape_kea()
+        kea_jobs = scrape_kea()
+        if kea_jobs:              # non-empty list = True
+            all_jobs += kea_jobs
+        else:
+            print("⚠️ KEA returned no jobs")
     except Exception as e:
         print("⚠️ KEA scraper failed:", e)
 
     print("\n=== Scraping Jobindex ===")
     try:
-        all_jobs += scrape_jobindex()
+        jobindex_jobs = scrape_jobindex()
+        if jobindex_jobs:
+            all_jobs += jobindex_jobs
+        else:
+            print("⚠️ Jobindex returned no jobs")
     except Exception as e:
         print("⚠️ Jobindex scraper failed:", e)
 
-    if all_jobs:
+    # Only send if BOTH have results
+    if kea_jobs and jobindex_jobs:
         print(f"🎉 Total scraped: {len(all_jobs)} jobs")
         send_to_backend(all_jobs)
     else:
-        print("🚫 No jobs scraped.")
+        print("🚫 Not sending to backend — one or both scrapers returned 0 jobs.")

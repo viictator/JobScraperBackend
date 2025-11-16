@@ -29,16 +29,10 @@ public class ScrapingController {
 
     @PostMapping("/scraped-jobs")
     public ResponseEntity<Void> receiveJobs(@RequestBody List<ScrapingJob> data) {
-        /*for (ScrapingJob job : data) {
-            job.setTime(DateUtils.toDaysAgo(job.getTime()));
-        }
-        scrapedJobs.clear();
-        scrapedJobs.addAll(data);*/
-
         scrapingService.receiveJobs(data);
         return ResponseEntity.ok().build();
-
     }
+
 
     @GetMapping("/scraped-jobs")
     public ResponseEntity<List<ScrapingJob>> getScrapedJobs() {

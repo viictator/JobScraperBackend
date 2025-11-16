@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -14,37 +15,33 @@ import java.util.List;
 @Service
 public class ScrapingService {
 
-    /*private final JobRepository jobRepository;
-
-    public ScrapingService (JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
-    }*/
-
     @Autowired
     JobRepository jobRepository;
 
 
-    public ResponseEntity<Void> receiveJobs (List<ScrapingJob> data) {
-        data.forEach((job) -> {
+    @Transactional
+    public ResponseEntity<Void> receiveJobs(List<ScrapingJob> data) {
+
+        System.out.println("🗑 Clearing old job database...");
+        jobRepository.deleteAll();
+
+        System.out.println("💾 Saving new scraped jobs...");
+        data.forEach(job -> {
             try {
-                if (!jobRepository.existsByJobTitleAndCompanyName(job.getJobTitle(), job.getCompanyName())) {
-                    job.setTime(DateUtils.toDaysAgo(job.getTime()));
-                    jobRepository.save(job);
-                    System.out.println("✅ Saved: " + job.getJobTitle());
-                } else {
-                    System.out.println("❌ Skipped due to duplicate: " + job.getJobTitle() + "" + job.getCompanyName());
-                }
+                job.setTime(DateUtils.toDaysAgo(job.getTime()));
+                jobRepository.save(job);
+
+                System.out.println("✅ Saved: " + job.getJobTitle());
 
             } catch (Exception e) {
-                // Log the exact job and error that failed
                 System.err.println("❌ ERROR saving job: " + job.getJobTitle() + " from " + job.getOriginsite());
-                e.printStackTrace(); // This is essential for the stack trace
-                // You can re-throw the exception here if you want the 500 status to remain
+                e.printStackTrace();
                 throw new RuntimeException("Failed to save job: " + job.getJobTitle(), e);
             }
         });
 
-        System.out.println("Received " + data.size() + " items");
+        System.out.println("🎉 Successfully replaced all jobs with " + data.size() + " new items");
+
         return ResponseEntity.ok().build();
     }
 
