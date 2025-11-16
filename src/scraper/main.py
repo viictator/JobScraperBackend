@@ -1,10 +1,16 @@
-from keascraperFinal import scrape as scrape_kea
-from jobindexscraper import scrape as scrape_jobindex
 import requests
 import sys
 import io
+
+# Fix stdout encoding for special characters
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 
+# Import scrapers
+from keascraperFinal import scrape as scrape_kea
+from jobindexscraper import scrape as scrape_jobindex
+from thehubscraper import scrape as scrape_thehub  # <-- TheHub scraper
+
+# --- Backend sender ---
 def send_to_backend(data):
     try:
         response = requests.post(
@@ -16,13 +22,14 @@ def send_to_backend(data):
     except Exception as e:
         print("❌ Error sending to backend:", e)
 
+# --- Main execution ---
 if __name__ == "__main__":
     all_jobs = []
 
     print("\n=== Scraping KEA ===")
     try:
         kea_jobs = scrape_kea()
-        if kea_jobs:              # non-empty list = True
+        if kea_jobs:
             all_jobs += kea_jobs
         else:
             print("⚠️ KEA returned no jobs")
@@ -39,9 +46,19 @@ if __name__ == "__main__":
     except Exception as e:
         print("⚠️ Jobindex scraper failed:", e)
 
-    # Only send if BOTH have results
-    if kea_jobs and jobindex_jobs:
+    print("\n=== Scraping TheHub ===")
+    try:
+        thehub_jobs = scrape_thehub()
+        if thehub_jobs:
+            all_jobs += thehub_jobs
+        else:
+            print("⚠️ TheHub returned no jobs")
+    except Exception as e:
+        print("⚠️ TheHub scraper failed:", e)
+
+    # Only send if all three scrapers returned results
+    if kea_jobs and jobindex_jobs and thehub_jobs:
         print(f"🎉 Total scraped: {len(all_jobs)} jobs")
         send_to_backend(all_jobs)
     else:
-        print("🚫 Not sending to backend — one or both scrapers returned 0 jobs.")
+        print("🚫 Not sending to backend — one or more scrapers returned 0 jobs.")
