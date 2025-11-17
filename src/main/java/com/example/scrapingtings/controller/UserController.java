@@ -20,14 +20,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/profile")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @GetMapping("/profile")
+    @GetMapping("")
     public ResponseEntity<User> getUser(Principal principal) {
         String username = principal.getName();
 
@@ -54,7 +54,7 @@ public class UserController {
 
     }
 
-    @PatchMapping("/profile")
+    @PatchMapping("")
     public ResponseEntity<UserDto> updateProfileProperty(
             @AuthenticationPrincipal UserDetails principal,
             @Valid @RequestBody ProfileUpdateRequest request) { // Updated parameter type
@@ -64,7 +64,7 @@ public class UserController {
         return ResponseEntity.ok(UserDto.fromEntity(updatedUser));
     }
 
-    @GetMapping("/profile/status")
+    @GetMapping("/status")
     public ResponseEntity<Map<String, Object>> getProfileStatus(Principal principal) {
 
         String username = principal.getName();
