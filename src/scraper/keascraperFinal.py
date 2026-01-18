@@ -163,7 +163,7 @@ def scrape():
             companyName = div.select_one("p.JobAdCard_companyName__7vp_H").get_text(strip=True)
             jobTitle = div.select_one("h3.JobAdCard_title__l2BSO").get_text(strip=True)
             link = "https://ek.jobteaser.com" + div.select_one("h3 a")["href"]
-            time_text = div.select_one("time.sk-Typography_regular__a_y2X").get_text(strip=True)
+            time_text = div.select_one("time").get_text(strip=True)
             contract = div.select_one("div.JobAdCard_contractInfo__8S_AD span").get_text(strip=True)
             location = div.select_one('div[data-testid="jobad-card-location"] span').get_text(strip=True)
 
