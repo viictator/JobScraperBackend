@@ -54,7 +54,7 @@ set LOGIN_PASSWORD=your_secure_password
 
 
 
-# Frontend (in a separate terminal/tab)
+# Frontend
 
 git clone https://github.com/viictator/JobScraperFrontend.git
 
