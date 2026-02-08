@@ -8,9 +8,10 @@ This project uses undetected Chrome automation to bypass bot detection and makes
 
 ## 🚀 Features
 
-- 🔐 Logs into KEA's student job portal using secure credentials
+- 🔐 Automatically Logs into KEA's student job portal using secure credentials
 - 🌐 Scrapes job listings from additional external websites
 - 🛡️ Uses `undetected-chromedriver` to bypass bot detection
+- 🤖 Generate cover letter drafts for jobs automatically based on your profile bio
 - 🔧 Easily configurable with environment variables
 - 🧩 Modular structure (`main.py`, `keascraper.py`, etc.)
 
