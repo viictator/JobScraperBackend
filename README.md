@@ -79,8 +79,10 @@ Start the frontend in another using npm run dev.
 
 Open your browser to http://localhost:5173/.
 
-Click the "Start Scraper" button to begin finding relevant IT/Programmer student jobs
+Now you're able to register and sign in to your account.
 
-🧠 The frontend sends a request to the backend, which triggers the appropriate scraper scripts (main.py).
+Go to your profile, write a bio and put in your contact details.
+
+From here, go to the job listings -> select a job -> generate a cover letter automatically (will be based on your profile and the job description) and apply to the job. ✔️
 
 
